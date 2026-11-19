@@ -249,3 +249,57 @@ Witness pairs
 Clause `a` is inactive in both pairs because the minor clauses have the same values, so $D(a) = b \oplus c = F$. As a
 result, changing `a` does not affect the value of the predicate `p`, which remains True in the first pair and False in
 the second pair.
+
+### Question 4
+
+#### (a)
+
+$S$ satisfies both PC and CC; however, it only satisfies RACC for clause `c`. PC is satisfied because rows 1 and 2 have
+different values for `p`. CC is satisfied because rows 1 and 2 have different values for `c`, and rows 1 and 8 have
+different values for both `a` and `b`. Rows 1 and 2 satisfy RACC for clause `c` because they have different values for
+`c` and `p` while keeping `a` and `b` fixed. RACC is not satisfied for clause `a` because no two selected rows change
+`a` while both `b` and `c` remain fixed. Similarly, RACC is not satisfied for clause `b` because no two selected rows
+change `b` while both `a` and `c` remain fixed.
+
+#### (b)
+
+| Criterion | Satisfied? | Reason                                                                         |
+|-----------|------------|--------------------------------------------------------------------------------|
+| GACC      | Yes        | `a` determines `p` in both rows, and `a` changes from T to F                   |
+| CACC      | No         | Although `a` determines `p` in both rows, `p` does not change (F in both rows) |
+| RACC      | No         | The minor clauses `b` and `c` do not stay fixed between the rows               |
+
+#### (c)
+
+Truth table
+
+| Row | a | b | c | p | Fault |
+|:---:|:-:|:-:|:-:|:-:|:-----:|
+|  1  | T | T | T | T |       |
+|  2  | T | T | F | F |  F1   |
+|  3  | T | F | T | T |  F2   |
+|  4  | T | F | F | F |  F1   |
+|  5  | F | T | T | T |       |
+|  6  | F | T | F | T |  F1   |
+|  7  | F | F | T | F |       |
+|  8  | F | F | F | F |       |
+
+| Input Row | Specified p | Reference result | F1 result | F2 result | Fault detected |
+|:---------:|:-----------:|:----------------:|:---------:|:---------:|:--------------:|
+|     2     |      F      |        F         |     T     |     F     |       F1       |
+|     3     |      T      |        T         |     T     |     F     |       F2       |
+
+No single row can detect both faults, because F1 has faults on rows 2, 4, and 6, while F2 has a fault on row 3. Since
+the faults occur on different rows, no single row can detect both faults.
+
+#### (d)
+
+| Row | First a |       b       | Second a (inside !a) | Result of !a  |       c       | Final result |
+|:---:|:-------:|:-------------:|:--------------------:|:--------------|:-------------:|:------------:|
+|  3  |  True   | Not evaluated |         True         | False         |     True      |     True     |
+|  7  |  False  |     False     |    Not evaluated     | Not evaluated | Not evaluated |    False     |
+
+Knowing an input's value does not mean every occurrence of that input is evaluated because Java uses short-circuit
+evaluation. Depending on the result of earlier operands, Java may skip parts of the expression entirely. For example, in
+row 7, the first `a` is False, causing the right side of `&&` to be skipped. Therefore, the second occurrence of `a`
+inside `!a` is not evaluated, even though its value is known.
