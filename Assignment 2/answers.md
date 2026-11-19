@@ -117,3 +117,135 @@ C1). Retain the two base tests and all other feasible variations. Include the du
 |  M6  | (A1, B1, C2)                  |
 |  M7  | (A3, B3, C1)                  |
 |  M8  | (A3, B1, C2)                  |
+
+## Part B
+
+### Question 3
+
+#### (a)
+
+The distinct underlying clauses are `a`, `b`, and `c`. Although `a` appears twice in the predicate, both occurrences
+represent the same Boolean input. Therefore, when constructing the truth table or substituting a value for `a`, use the
+same value for both occurrences, with the second negated.
+
+#### (b)
+
+| Row | a | b | c | p |
+|:---:|:-:|:-:|:-:|:-:|
+|  1  | T | T | T | T |
+|  2  | T | T | F | F |
+|  3  | T | F | T | T |
+|  4  | T | F | F | F |
+|  5  | F | T | T | T |
+|  6  | F | T | F | T |
+|  7  | F | F | T | F |
+|  8  | F | F | F | F |
+
+#### (c)
+
+$D(a) = p[a := T] \oplus p[a := F]$
+
+$D(a) = ((T \lor b) \land (\neg T \lor c)) \oplus ((F \lor b) \land (\neg F \lor c))$
+
+$D(a) = (T \land (F \lor c)) \oplus (b \land (T \lor c))$
+
+$D(a) = c \oplus b$
+
+---
+
+$D(b) = p[b := T] \oplus p[b := F]$
+
+$D(b) = ((a \lor T) \land (\neg a \lor c)) \oplus ((a \lor F) \land (\neg a \lor c))$
+
+$D(b) = (T \land (\neg a \lor c)) \oplus (a \land (\neg a \lor c))$
+
+$D(b) = (\neg a \lor c) \oplus (a \land (\neg a \lor c))$
+
+$D(b) = (\neg a \lor c) \oplus ((a \land \neg a) \lor (a \land c))$
+
+$D(b) = (\neg a \lor c) \oplus (F \lor (a \land c))$
+
+$D(b) = (\neg a \lor c) \oplus (a \land c)$
+
+$D(b) = ((\neg a \lor c) \land \neg (a \land c)) \lor (\neg (\neg a \lor c) \land (a \land c))$
+
+$D(b) = ((\neg a \lor c) \land (\neg a \lor \neg c)) \lor ((a \lor \neg c) \land (a \land c))$
+
+$D(b) = (\neg a \lor (c \land \neg c)) \lor (a \land a \land \neg c \land c)$
+
+$D(b) = (\neg a \lor F) \lor F$
+
+$D(b) = \neg a$
+
+---
+
+$D(c) = p[c := T] \oplus p[c := F]$
+
+$D(c) = ((a \lor b) \land (\neg a \lor T)) \oplus ((a \lor b) \land (\neg a \lor F))$
+
+$D(c) = ((a \lor b) \land T) \oplus ((a \lor b) \land \neg a)$
+
+$D(c) = (a \lor b) \oplus ((a \lor b) \land \neg a)$
+
+$D(c) = (a \lor b) \oplus ((a \land \neg a) \lor (b \land \neg a))$
+
+$D(c) = (a \lor b) \oplus (F \lor (b \land \neg a))$
+
+$D(c) = (a \lor b) \oplus (b \land \neg a)$
+
+$D(c) = ((a \lor b) \land \neg (b \land \neg a)) \lor (\neg (a \lor b) \land (b \land \neg a))$
+
+$D(c) = ((a \lor b) \land (\neg b \lor a)) \lor ((\neg a \land \neg b) \land b \land \neg a)$
+
+$D(c) = ((a \lor b) \land (\neg b \lor a)) \lor (F)$
+
+$D(c) = (a \lor b) \land (\neg b \lor a)$
+
+$D(c) = (a \land \neg b) \lor (a \land a) \lor (b \land \neg b) \lor (b \land a)$
+
+$D(c) = (a \land \neg b) \lor a \lor F \lor (a \land b)$
+
+$D(c) = a \lor (a \land \neg b) \lor (a \land b)$
+
+$D(c) = a$
+
+#### (d)
+
+Selected truth-table rows
+
+| Row | a | b | c | p |
+|:---:|:-:|:-:|:-:|:-:|
+|  1  | T | T | T | T |
+|  2  | T | T | F | F |
+|  6  | F | T | F | T |
+|  8  | F | F | F | F |
+
+Witness pairs
+
+| Major |  Pair  | Fixed minors |  p   |
+|:-----:|:------:|:------------:|:----:|
+|   a   | (2, 6) | b = T, c = F | F, T |
+|   b   | (6, 8) | a = F, c = F | T, F |
+|   c   | (1, 2) | a = T, b = T | T, F |
+
+#### (e)
+
+Selected truth-table rows
+
+| Row | a | b | c | p |
+|:---:|:-:|:-:|:-:|:-:|
+|  1  | T | T | T | T |
+|  4  | T | F | F | F |
+|  5  | F | T | T | T |
+|  8  | F | F | F | F |
+
+Witness pairs
+
+| Major |  Pair  | Fixed minors |  p   |
+|:-----:|:------:|:------------:|:----:|
+|   a   | (1, 5) | b = T, c = T | T, T |
+|   a   | (4, 8) | b = F, c = F | F, F |
+
+Clause `a` is inactive in both pairs because the minor clauses have the same values, so $D(a) = b \oplus c = F$. As a
+result, changing `a` does not affect the value of the predicate `p`, which remains True in the first pair and False in
+the second pair.
